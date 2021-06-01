@@ -1,0 +1,85 @@
+.tile{
+	width: 80px;
+	height: 80px;
+	font-size: 60px;
+	font-family: Helvetica;
+}
+
+.gameBoard{
+	display: none;
+}
+
+.center{
+	margin: 0 auto;
+}
+
+*{
+    box-sizing: border-box;
+    background-color: rgb(199 234 251);
+}
+
+.mainImg
+{
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.image{
+
+    height: 150px;
+    width: 200px;
+}
+
+.theTitle
+{
+    text-align: center;
+    font-family: 'Trade Winds', cursive;
+    font-size: 3em;
+}
+
+.howToplay
+{
+    font-family:  cursive;
+    
+}
+
+.howToplay h4
+
+{
+    margin-left: 20px;
+}
+
+.createGame
+{
+    font-family:  cursive;
+    margin-left: 20px;
+   
+}
+
+.joinGame
+{
+    font-family:  cursive;
+    margin-left: 20px;
+}
+input
+{
+    background-color: white;
+}
+#new
+{
+    border-radius: 4px;
+    color: tomato;
+    font-weight: bold;
+    font-family:  cursive;
+
+}
+
+#join
+{
+    border-radius: 4px;
+    color: tomato;
+    font-weight: bold;
+    font-family:  cursive;
+}
+

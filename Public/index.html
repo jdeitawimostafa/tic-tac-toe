@@ -4,22 +4,26 @@
 <head>
     <title>Tic Tac Toe</title>
     <!-- add css file -->
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
     <div class="container">
         <div class="menu">
-            <h1>Tic - Tac - Toe</h1>
+            <h1 class="theTitle">Tic Tac Toe</h1>
+            <div class="mainImg">
+                <img class="image" src="/xo.gif" alt="">
+            </div>
+            
             <!-- how to play card -->
             <div class="howToplay">
                 <h4>How To Play</h4>
-                <ol>
+                <ul>
                     <li>Player 1 Create a new game by entering the username</li>
                     <li>Player 2 Enter another username and the room id that is displayed on first window.</li>
                     <li>Click on join game. </li>
-                </ol>
+                </ul>
             </div>
              <!-- create game card/part -->
             <div class="createGame">
@@ -60,6 +64,7 @@
             </table>
         </div>
     </div>
+    
     <!-- please make double check for the jQuery connection -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
     <script src="/socket.io/socket.io.js"></script>
