@@ -1,14 +1,14 @@
 'use strict';
 class Player {
 
-    constructor(playerId, playerName) {
+  constructor(playerId, playerName) {
 
-      this.playerId = playerId;
+    this.playerId = playerId;
 
-      this.playerName = playerName;
+    this.playerName = playerName;
       
-    }
   }
+}
   
-  module.exports = Player;
+module.exports = Player;
   

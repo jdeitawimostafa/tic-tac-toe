@@ -83,3 +83,32 @@ input
     font-family:  cursive;
 }
 
+.game-block {
+    font-size: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+
+
+    .game {
+        width: 100%;
+        display: grid;
+        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 1px;
+        height: 80%;
+      }
+      .game div {
+        background-color: grey;
+      }
+      
+      .game-block {
+        font-size: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .game-block:hover {
+        cursor: pointer;
+      }
