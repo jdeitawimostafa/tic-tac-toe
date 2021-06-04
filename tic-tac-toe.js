@@ -49,4 +49,40 @@ io.on('connection', (socket) => {
       game.setStatus(1); // In progress
     }
   });
+
+  socket.on('make-move', (data) => {
+    console.log(`Game status ${game.getStatus()}`);
+    if (game.getStatus() === 2) {
+      console.log(`Winner is ${game.getWinner().id}`);
+    }
+    else if (game.getStatus() === 0) {
+      socket.emit('message', 'Please Wait');
+    }
+    else if (game.getCurrentPlayer().id === socket.id) {
+      if (game.getPositions().indexOf(data.position) === -1) {
+        game.addPosition(data.position);
+        const symbol = game.getCurrentPlayer().symbol;
+        socket.emit('move-made', {
+          position: data.position,
+          symbol: symbol,
+        });
+        socket.to(socket.roomId).emit('move-made', {
+          position: data.position,
+          symbol: symbol,
+        });
+        if (game.updateBoard(data.position, game.getCurrentPlayer().number)) {
+          socket.emit('result', 'You Win');
+          socket.to(socket.roomId).emit('result', 'You Lost');
+        }
+        if (game.checkDraw()) {
+          io.to(socket.roomId).emit('result', 'Draw');
+        }
+        game.changeTurn();
+      } else {
+        console.log('Position already clicked');
+      }
+    } else {
+      socket.emit('invalid-move', 'Your Opponents Turn');
+    }
+  });
 });
