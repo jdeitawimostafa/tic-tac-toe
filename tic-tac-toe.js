@@ -85,4 +85,26 @@ io.on('connection', (socket) => {
       socket.emit('invalid-move', 'Your Opponents Turn');
     }
   });
+  socket.on('disconnect', () => {
+    console.log(socket.id, 'disconnected');
+    socket.leave(socket.roomId);
+    if (game.getStatus() === 0 && game.getCurrentPlayersCount() === 1) {
+      // when the game has not started yet but the only user in the room disconnects
+      game.playerLeft(socket, false);
+      rooms.splice(game, 1);
+    } else if (game.getStatus() === 1) {
+      // when the game is in progress but one user leaves the room
+      game.playerLeft(socket, true);
+      io.to(socket.roomId).emit('result', 'Opponent Left! You Win');
+    } else if (game.getStatus() === 2 || game.getCurrentPlayersCount() === 2) {
+      // when the game is over and one user leaves the room
+      game.playerLeft(socket, false);
+    } else if (game.getStatus() === 2 || game.getCurrentPlayersCount() === 1) {
+      // when the game is over and the other user also leaves the room
+      game.playerLeft(socket, false);
+      rooms.splice(game,1);
+      archivedRooms.push(game);
+    }
+  });
+
 });
