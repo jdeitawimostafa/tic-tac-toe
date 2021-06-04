@@ -22,3 +22,32 @@ $('#join').on('click', () => {
   }
   socket.emit('newJoin', { name:name, room: roomID });
 });
+
+$('.tic').click( function(e) {
+  e.preventDefault();
+  const position = $(this).attr('id');
+  socket.emit('make-move', {
+    position: position,
+  });
+});
+
+socket.on('move-made', (data) => {
+  $('#' + data.position).text(data.symbol);
+  $('#message').text('');
+});
+
+socket.on('invalid-move', (msg) => {
+  $('#message').text(msg);
+});
+
+socket.on('result', (msg) => {
+  $('#message').text(msg);
+});
+
+socket.on('message', (msg) => {
+  $('#message').text(msg);
+});
+
+socket.on('empty-message', (msg) => {
+  $('#message').text(msg);
+});
