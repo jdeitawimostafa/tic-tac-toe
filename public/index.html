@@ -23,16 +23,28 @@
     <main>
         <div class="login">
             <h1>Join a Game!</h1>
-            <form method="get" action="/waiting">
+            <!--<form method="get" action="/waiting">
                 <input placeholder="Username" name="username" id='username' type="text" />
-                <input type="submit" />
-            </form>
+                <input type="submit" 
+            </form>/-->
+            <input type="text" name="name" id="nameNew" placeholder="Enter your name" required>
+            <button id="new">New Game</button>
+            <h4>Join an existing game</h4>
+            <input type="text" name="name" id="nameJoin" placeholder="Enter your name" required>
+            <input type="text" name="room" id="room" placeholder="Enter Game ID" required>
+            <button id="join">Join Game</button>
+            <div class="content">
+                <div class="waiting"></div>
+                <div>
+                    <p class="message"></p>
+                </div>
+            </div>
         </div>
     </main>
     <footer>
     </footer>
-    <script>
-        document.querySelector('#username').focus();
-    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/app.js"></script>
 </body>
 </html>

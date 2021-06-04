@@ -1,40 +1,47 @@
-const fact = document.querySelector('.fact');
+
+'use strict';
+
+console.log('🚀 ~ file: app.js ~ line 15 ~ $ ~ playerName');
 const message = document.querySelector('.message');
 const content = document.querySelector('.content');
 
-const url = new URL(window.location.href);
-const playerName = url.searchParams.get('username');
-console.log(playerName);
-console.log(url);
+//const url = new URL(window.location.href);
+//const playerName = url.searchParams.get('username');
 
-message.innerHTML = `Don't worry <strong>${playerName}</strong>, your opponent is coming. Here's some random facts to pass the time.`;
 
-const getFact = () => {
-  fact.textContent = 'Loading fact...';
-  fetch('https://uselessfacts.jsph.pl/random.json?language=en')
-    .then((result) => {
-      return result.json();
-    })
-    .then(({ text }) => {
-      fact.textContent = text;
-    })
-    .catch((err) => {
-      console.log(err);
-      fact.innerHTML =
-        '<span style=\'color: red\'>FACTS COULD NOT BE LOADED :(</span>';
-    });
-};
 
-getFact();
-const fact_interval = setInterval(getFact, 12 * 1000);
+//message.innerHTML = `Don't worry <strong>${playerName}</strong>, your opponent is coming. Here's some random facts to pass the time.`;
+const socket = io();
+
+$('#new').on('click', () => {
+  const playerName = $('#nameNew').val();
+  console.log('playerName ',playerName );
+  if (!playerName) {
+    alert('Please enter your name.');
+    return;
+  }
+  console.log('connection playerName ',playerName );
+  socket.emit('createGame', { playerName });
+});
+
+$('#join').on('click', () => {
+  const name = $('#nameJoin').val();
+  const roomID = $('#room').val();
+  if (!name || !roomID) {
+    alert('Please enter your name and game ID.');
+    return;
+  }
+  socket.emit('joinGame', { name:name, room: roomID });
+});
+
+/* 
 const socket = io();
 
 socket.on('connect', () => {
   socket.emit('waiting', { playerName });
-});
+}); */
 
 socket.on('game-update', (msg) => {
-  clearInterval(fact_interval);
   const { game, yourTurn, otherPlayer } = msg;
   const turnMessage = yourTurn
     ? `Your Turn`
