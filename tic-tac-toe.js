@@ -1,132 +1,52 @@
 'use strict';
 
-require('dotenv').config();
-
 const express = require('express');
-
 const app = express();
-
-const PORT = process.env.PORT || 4000;
-
-const socketIo = require('socket.io');
-
-app.use(express.static(__dirname + '/public'));
-
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
-  
-app.get('/waiting', (req, res) => {
-  res.sendFile(__dirname + '/public/waiting.html');
-});
+const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => console.log('listening on port ' + PORT));
+const io = require('socket.io')(server);
+const path = require('path');
+const Game = require('./models/game');
+const root = path.join(__dirname, 'public');
+const faker = require('faker');
 
-const Player = require('./Models/player/player.js');
-const TicTacToe = require('./Models/game/game.js');
+const symbol = ['X', 'O'];
+const numbers = [1, -1];
+
+app.use(express.static(root));
+app.get('/' , (req, res) => {
+  res.sendFile('index.html', {root});
+});
 
 
-let waitingList = [];
-let games = [];
-let players = [];
-
-const io = socketIo(server);
+let rooms = []; 
+let archivedRooms = []; 
 
 io.on('connection', (socket) => {
-  const updateGame = (game) => {
-    const player1 = players.find((player) => player.playerId === game.player1Id);
-    const player2 = players.find((player) => player.playerId === game.player2Id);
-    if (game.turn === 0) {
-      io.to(game.player1Id).emit('game-update', {
-        game: game.game,
-        yourTurn: true,
-        otherPlayer: player2.playerName,
-      });
-      io.to(game.player2Id).emit('game-update', {
-        game: game.game,
-        yourTurn: false,
-        otherPlayer: player1.playerName,
-      });
+  let game;
+  socket.on('join', (playerName) => {
+    if (rooms.length === 0 || rooms[rooms.length-1].getPlayersCount() === 2) {
+      game = new Game(faker.datatype.number());
+      rooms.push(game);
+      console.log(`Total Rooms ${rooms.length}`);
     } else {
-      io.to(game.player1Id).emit('game-update', {
-        game: game.game,
-        yourTurn: false,
-        otherPlayer: player2.playerName,
-      });
-      io.to(game.player2Id).emit('game-update', {
-        game: game.game,
-        yourTurn: true,
-        otherPlayer: player1.playerName,
-      });
+      game = rooms[rooms.length - 1];
     }
-  };
-  socket.on('waiting', ({ playerName }) => {
-    const player = new Player(socket.id, playerName);
-    players.push(player);
-    if (waitingList.length > 0) {
-      const newPlayer = waitingList.shift();
-      console.log('game start');
-      console.log(waitingList);
-      const game = new TicTacToe(player.playerId, newPlayer.playerId);
-      games.push(game);
-      console.log('new game');
-      console.log(games);
-      updateGame(game);
-    } else {
-      waitingList.push(player);
-      console.log('new waiting person');
-      console.log('aaaaaaaa',waitingList);
+    socket.roomId = game.getRoomId();
+    socket.join(socket.roomId);
+    game.addPlayer(playerName, socket.id, socket, symbol[game.getPlayersCount()], numbers[game.getPlayersCount()]);
+    if (game.getPlayersCount() === 1) {
+      socket.emit('message', `Welcome ${playerName.playerName}, waiting another Player, your room id is ${socket.roomId}`);
     }
   });
-  socket.on('move', ({ move }) => {
-    const game = games.find((game) => game.includes(socket.id));
-    if (game.yourTurn(socket.id)) {
-      console.log(game.makeMove(move));
-      updateGame(game);
-    } else {
-      socket.emit('server-message', {
-        message: 'Wait your turn',
-      });
-    }
-    const winner = game.winner();
-    if (winner) {
-      if (winner === 1) {
-        io.to(game.player1Id).emit('game-over', {
-          message: 'YOU WIN!',
-        });
-        io.to(game.player2Id).emit('game-over', {
-          message: 'YOU LOSE :(',
-        });
-      } else if (winner === 2) {
-        io.to(game.player2Id).emit('game-over', {
-          message: 'YOU WIN!',
-        });
-        io.to(game.player1Id).emit('game-over', {
-          message: 'YOU LOSE :(',
-        });
-      } else {
-        io.to(game.player1Id).to(game.player2Id).emit('game-over', {
-          message: 'SCRATCH, you\'re both losers',
-        });
-      }
+  socket.on('newJoin', (data) => {
+    game = rooms[rooms.length - 1];
+    socket.roomId = data.room;
+    socket.join(socket.roomId);
+    game.addPlayer(data.name, socket.id, socket, symbol[game.getPlayersCount()], numbers[game.getPlayersCount()]);
+    if (game.getPlayersCount() === 2) {
+      io.to(socket.roomId).emit('empty-message', 'Game Starts');
+      game.setStatus(1); // In progress
     }
   });
-
-  /*socket.on("disconnect", () => {
-        const game = games.find((game) => game.includes(socket.id));
-        const find = waitingList.find((user) => user.id === socket.id);
-        users = users.filter((user) => user.id !== socket.id);
-        if (find) {
-            waitingList = waitingList.filter((user) => user.id !== socket.id);
-            console.log("left waiting area");
-            console.log(waitingList);
-        }
-        if (game) {
-            games = games.filter((g) => g.gameId !== game.gameId);
-            console.log("game over");
-            console.log(games);
-            io.to(game.player1Id).to(game.player2Id).emit("player-disconnected", {
-                message: "Other player disconnected",
-            });
-        }
-    });*/
 });
