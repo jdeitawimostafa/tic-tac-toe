@@ -1,4 +1,4 @@
-body{
+/* body{
     background: #212121;
     color: #666;
 }
@@ -49,4 +49,162 @@ footer{
     display: block;
     text-align: center;
     padding-top: 20px;
+} */
+
+body{
+color: #666;
+/* background-image: url(/rubberduck-happy_4_1.gif);
+background-repeat:no-repeat; 
+background-attachment: fixed; 
+background-size: cover; */
+
+background: linear-gradient(-45deg, #EE7752  , #eeeeee , #f05945 ,#23A6D5 ,#23D5AB );
+background-size: 400% 400%;
+position: relative;
+animation: change 10s ease-in-out infinite;
+
 }
+
+@keyframes change 
+{
+
+0% {
+background-position: 0  50%;
+}
+
+50% {
+    background-position: 100% 50% ;
+}
+
+100% {
+    background-position: 0 50% ;
+}
+
+
+}
+h1{
+    text-align: center;
+    color: #fa5b33;
+    font-family: 'Trade Winds', cursive;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: xx-large;
+   
+}
+
+.input1{
+    margin-top: 10px;
+    margin-left: 20px;
+    width: 30%;
+    height: 25px;
+    border-radius: 3px;
+    border-color: #fb714e;
+}
+.btn1
+{
+    margin-top: 10px;
+    margin-right: 100px;
+    height: 27px;
+    color: #333;
+    background-color: #06d0de;
+    font-family: 'Trade Winds', cursive;
+    border-radius: 5px;
+    width: 26%;
+    margin-left: 10px;
+    font-weight:bold;
+    border-color:#06d0de;
+
+}
+
+.input2
+{
+    margin-top: 5px;
+    margin-left: 20px;
+    width: 30%;
+    height: 25px;
+    border-radius: 3px;
+    border-color: #fb714e;
+}
+
+.input3
+{
+    margin-top: 5px;
+    width: 26%;
+    height: 25px;
+    border-radius: 3px;
+    border-color: #fb714e;
+    margin-left: 5px;
+}
+.btn2
+{
+    margin-top: 5px;
+    height: 27px;
+    color: #333;
+    background-color: #06d0de;
+    font-family: 'Trade Winds', cursive;
+    border-radius: 5px;
+    border-color:#06d0de;
+    width: 24%;
+    margin-left: 10px;
+    font-weight:bold;
+    margin-right: 15px;
+
+}
+
+.clearfix{
+    clear: both;
+}
+#box{
+    width: 398px;
+    overflow: auto;
+    margin: 40px auto;
+    background: #a099738c;
+    padding-bottom: 20px; 
+    border-radius: 10px;
+}
+#message{
+    
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color:#6e1c08;
+    font-weight: bold;
+    text-align: center;
+    font-size: larger;
+}
+
+#gameBoard
+{
+    margin-left: 26px;
+    margin-top: 20px;
+   
+}
+#gameBoard li{
+    float: left;
+    margin: 10px;
+    height: 70px;
+    width: 70px;
+    font-size: 50px;
+    background: #333;
+    color: #ccc;
+    list-style: none;
+    text-align: center;
+    border-radius: 5px;
+}
+#gameBoard li:hover, #reset:hover{
+    cursor: pointer;
+    background: #000;
+}
+#reset{
+    border: 0;
+    background: #444;
+    color: #fff;
+    width: 70%;
+    padding: 15px;
+    border-radius: 5px;
+}
+footer{
+    display: block;
+    text-align: center;
+    padding-top: 20px;
+}
+
