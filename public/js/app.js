@@ -16,11 +16,12 @@ $('#new').on('click', () => {
 $('#join').on('click', () => {
   const name = $('#nameJoin').val();
   const roomID = $('#room').val();
+  const roomIndex = $('#roomIndex').val();
   if (!name || !roomID) {
     alert('Please enter your name and game ID.');
     return;
   }
-  socket.emit('newJoin', { name:name, room: roomID });
+  socket.emit('newJoin', { name:name, room: roomID, roomIndex:roomIndex });
 });
 
 $('.tic').click( function(e) {
@@ -42,6 +43,16 @@ socket.on('invalid-move', (msg) => {
 
 socket.on('result', (msg) => {
   $('#message').text(msg);
+});
+
+socket.on('left', (msg) => {
+  console.log('Opponent Left');
+  let answer = prompt('Do you want to wait him?y/n');
+  if (answer === 'y'){
+    socket.emit('yesWaite');
+  } if (answer === 'n'){
+    window.location.reload();
+  }
 });
 
 socket.on('message', (msg) => {

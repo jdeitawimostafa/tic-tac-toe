@@ -81,7 +81,7 @@
 
   - run `npm install`
   - run `node tic-tac-toe.js` or `npm start`
-  - visit heroku link [here](https://tic-tac-toe-socket-io-401.herokuapp.com/)
+  - visit heroku link [here](https://tic-tic-toe.herokuapp.com/)
 
 - this app done with help of
   - dependencies
